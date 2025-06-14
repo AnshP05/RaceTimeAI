@@ -21,4 +21,14 @@ public class PredictionResult {
     public String getFormattedTime() {
         return Formatter.formatTime(predictedTimeSeconds);
     }
+
+    public String getPacePerMile() {
+        double distance = TimePredictor.distanceMap.get(raceDistance);
+        return Formatter.formatPacePerMile(predictedTimeSeconds, distance);
+    }
+
+    public String getPacePerKm() {
+        double distance = TimePredictor.distanceMap.get(raceDistance);
+        return Formatter.formatPacePerKm(predictedTimeSeconds, distance);
+    }
 }

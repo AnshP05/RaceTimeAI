@@ -46,7 +46,7 @@ public class TimePredictor {
             if(!entry.getKey().equals(runner.getRaceDistance())){
                 results.add(new PredictionResult(entry.getKey(), riegelFormula(t1, d1, entry.getValue(), r)));
             } else {
-                results.add(entry.getKey(), runner.getTotalTimeInSeconds());
+                results.add(new PredictionResult(entry.getKey(), runner.getTotalTimeInSeconds()));
             }
         }
         return results;
