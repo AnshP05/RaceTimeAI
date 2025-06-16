@@ -1,75 +1,87 @@
 package models;
 
+import java.util.*;
+
 public class RunnerProfile {
     //instances
-    private String raceDistance;
-    private int raceHours;
-    private int raceMinutes;
-    private int raceSeconds;
-    private int weeklyMileage;
+    private int age;
+    private String gender;
     private double yearsRunning;
+    private double weeklyMileage;
+    private Map<String, String> raceTimes;
+    private String bestRaceDistance;
+    private double bestRaceTime;
 
-    //constructor
-    public RunnerProfile(String raceDistance, int raceHours, int raceMinutes, int raceSeconds, int weeklyMileage, double yearsRunning) {
-        this.raceDistance = raceDistance;
-        this.raceHours = raceHours;
-        this.raceMinutes = raceMinutes;
-        this.raceSeconds = raceSeconds;
-        this.weeklyMileage = weeklyMileage;
+
+    public RunnerProfile(int age, String gender, double yearsRunning, double weeklyMileage, String bestRaceDistance, double bestRaceTime) {
+        this.age = age;
+        this.gender = gender;
         this.yearsRunning = yearsRunning;
+        this.weeklyMileage = weeklyMileage;
+        this.raceTimes = new HashMap<>();
+        this.bestRaceDistance = bestRaceDistance;
+        this.bestRaceTime = bestRaceTime;
+
     }
 
-    // Getters and setters
-    public String getRaceDistance() {
-        return raceDistance;
+    public void addRaceTime(String race, String time){
+        raceTimes.put(race, time);
     }
 
-    public void setRaceDistance(String raceDistance) {
-        this.raceDistance = raceDistance;
+    @Override
+    public String toString() {
+        return "RunnerProfile{" +
+            "age=" + age +
+            ", gender='" + gender + '\'' +
+            ", yearsRunning=" + yearsRunning +
+            ", weeklyMileage=" + weeklyMileage +
+            ", raceTimes=" + raceTimes +
+            '}';
     }
 
-    public int getRaceHours() {
-        return raceHours;
+    //getters
+
+    public double getYearsRunning() {
+    return yearsRunning;
     }
 
-    public void setRaceHours(int raceHours) {
-        this.raceHours = raceHours;
-    }
-
-    public int getRaceMinutes() {
-        return raceMinutes;
-    }
-
-    public void setRaceMinutes(int raceMinutes) {
-        this.raceMinutes = raceMinutes;
-    }
-
-    public int getRaceSeconds() {
-        return raceSeconds;
-    }
-
-    public void setRaceSeconds(int raceSeconds) {
-        this.raceSeconds = raceSeconds;
-    }
-
-    public int getWeeklyMileage() {
+    public double getWeeklyMileage() {
         return weeklyMileage;
     }
 
-    public void setWeeklyMileage(int weeklyMileage) {
-        this.weeklyMileage = weeklyMileage;
+    public Map<String, String> getRaceTimes() {
+        return raceTimes;
     }
 
-    public double getYearsRunning() {
-        return yearsRunning;
+    public String getRaceDistance() {
+        return bestRaceDistance;
     }
 
-    public void setYearsRunning(double yearsRunning) {
-        this.yearsRunning = yearsRunning;
-    }
-
-    //helper methods
     public double getTotalTimeInSeconds() {
-        return raceSeconds + 60 * raceMinutes + 3600 * raceHours;
+        return bestRaceTime;
     }
+
+
+    public static double convertTimeToSeconds(String time) {
+        String[] parts = time.split(":");
+
+        if (parts.length == 2) {
+            // mm:ss.xx
+            int minutes = Integer.parseInt(parts[0]);
+            double seconds = Double.parseDouble(parts[1]);
+            return minutes * 60 + seconds;
+
+        } else if (parts.length == 3) {
+            // hh:mm:ss
+            int hours = Integer.parseInt(parts[0]);
+            int minutes = Integer.parseInt(parts[1]);
+            double seconds = Double.parseDouble(parts[2]);
+            return hours * 3600 + minutes * 60 + seconds;
+
+        } else {
+            return 0;
+        }
+    }
+
+
 }

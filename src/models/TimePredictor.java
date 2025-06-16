@@ -40,18 +40,31 @@ public class TimePredictor {
 
     public List<PredictionResult> generatePredictions(RunnerProfile runner) {
         List<PredictionResult> results = new ArrayList<>();
-        double r = manipulateFatigueExponent(runner);
-        double d1 = distanceMap.get(runner.getRaceDistance());
+        String baseRace = runner.getRaceDistance();
+
+        if (baseRace == null || !distanceMap.containsKey(baseRace)) {
+            System.err.println("Missing or invalid race distance for runner: " + baseRace);
+            return results; // Or handle fallback logic
+        }
+
+        double d1 = distanceMap.get(baseRace);
         double t1 = runner.getTotalTimeInSeconds();
+        double r = manipulateFatigueExponent(runner);
+
         for (Map.Entry<String, Double> entry : distanceMap.entrySet()) {
-            if(!entry.getKey().equals(runner.getRaceDistance())){
-                results.add(new PredictionResult(entry.getKey(), riegelFormula(t1, d1, entry.getValue(), r)));
+            String event = entry.getKey();
+            double d2 = entry.getValue();
+
+            if (!event.equals(baseRace)) {
+                results.add(new PredictionResult(event, riegelFormula(t1, d1, d2, r)));
             } else {
-                results.add(new PredictionResult(entry.getKey(), runner.getTotalTimeInSeconds()));
+                results.add(new PredictionResult(event, t1));
             }
         }
+
         return results;
     }
+
         
 }
 
