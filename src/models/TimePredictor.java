@@ -6,19 +6,20 @@ import java.util.ArrayList;
 
 public class TimePredictor {
     
-    public static final Map<String, Double> distanceMap = Map.of(
-        "800m", 800.0,
-        "1500m", 1500.0,
-        "1600m", 1600.0,
-        "mile", 1609.34,
-        "3200m", 3200.0,
-        "2 mile", 3218.68,
-        "5k", 5000.0,
-        "8k", 8000.0,
-        "10k", 10000.0,
-        "half marathon", 21097.5,
-        "marathon", 42195.0
+    public static final Map<String, Double> distanceMap = Map.ofEntries(
+        Map.entry("800m", 800.0),
+        Map.entry("1500m", 1500.0),
+        Map.entry("1600m", 1600.0),
+        Map.entry("mile", 1609.34),
+        Map.entry("3200m", 3200.0),
+        Map.entry("2 mile", 3218.68),
+        Map.entry("5k", 5000.0),
+        Map.entry("8k", 8000.0),
+        Map.entry("10k", 10000.0),
+        Map.entry("half marathon", 21097.5),
+        Map.entry("marathon", 42195.0)
     );
+
 
     private double manipulateFatigueExponent(RunnerProfile runner) {
         double r = 1.06;

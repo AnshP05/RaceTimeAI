@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "SmileTest",
+      "request": "launch",
+      "mainClass": "models.SmileTest",
+      "projectName": "RaceTimeAI_2837338d"
+    },
+    {
+      "type": "java",
       "name": "Launch JavaFX App",
       "request": "launch",
       "mainClass": "Main",

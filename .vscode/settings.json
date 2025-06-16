@@ -2,6 +2,9 @@
     "java.project.sourcePaths": ["src"],
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
-        "C:/Program Files/Java/javafx-sdk-24.0.1/lib/*.jar"
-    ]
+    "C:/Program Files/Java/javafx-sdk-24.0.1/lib/*.jar",
+    "C:/Users/Ansh/OneDrive/Desktop/Java Projects/RaceTimeAI/lib/*.jar"
+],
+
+    "java.debug.settings.onBuildFailureProceed": true
 }
