@@ -4,6 +4,7 @@ import smile.data.*;
 import smile.data.vector.DoubleVector;
 import smile.regression.OLS;
 import smile.data.formula.Formula;
+import smile.regression.LinearModel;
 
 import java.util.*;
 
@@ -28,8 +29,17 @@ public class MLTrainer {
         double[][] x = X.toArray(new double[0][]);
         double[] y = Y.stream().mapToDouble(Double::valueOf).toArray();
 
-        DataFrame df = DataFrame.of(x, "age", "yearsRunning", "weeklyMileage", "isMale", "knownRaceTime").merge(DoubleVector.of("fiveKTime", y));
+        DataFrame df = DataFrame.of(x, "age", "yearsRunning", "weeklyMileage", "isMale").merge(DoubleVector.of("fiveKTime", y));
+;
 
-        return OLS.fit(Formula.lhs("fiveKTime"), df);
+        return smile.regression.RidgeRegression.fit(Formula.lhs("fiveKTime"), df, 0.1);
+
+    }
+
+    public static double predict5kTime(RunnerProfile runner, LinearModel model) {
+
+        double[] features = FeatureBuilder.buildFeatures(runner);
+        return model.predict(features);
+
     }
 }

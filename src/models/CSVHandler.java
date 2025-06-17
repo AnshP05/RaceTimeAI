@@ -30,8 +30,8 @@ public class CSVHandler {
                     String gender = csv[2].trim();
                     int age = Integer.parseInt(csv[1].trim());
                     double yearsRunning = Double.parseDouble(csv[3].trim());
-                    double weeklyMileage = csv.length > 18 && !csv[18].trim().isEmpty() 
-                                           ? Double.parseDouble(csv[18].trim()) : 0.0;
+                    String mileageStr = csv[csv.length - 1].trim();
+                    double weeklyMileage = mileageStr.isEmpty() ? 0.0 : Double.parseDouble(mileageStr);
                     String bestRaceDistance = csv[4].trim();
                     double bestRaceTime = RunnerProfile.convertTimeToSeconds(csv[5].trim());
 
@@ -44,7 +44,7 @@ public class CSVHandler {
 
                     for (int i = 0; i < eventNames.length; i++) {
                         int index = 6 + i;
-                        if (index < csv.length) {
+                        if (index < csv.length - 1) {
                             String time = csv[index].trim();
                             if (!time.isEmpty()) {
                                 runner.addRaceTime(eventNames[i], time);

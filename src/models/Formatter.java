@@ -21,4 +21,6 @@ public class Formatter {
         double secondsPerKm = seconds / distanceKm;
         return formatTime(secondsPerKm) + " / km";
     }
+
+    
 }

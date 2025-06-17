@@ -7,7 +7,6 @@ public class FeatureBuilder {
             runner.getYearsRunning(),
             runner.getWeeklyMileage(),
             runner.getGender().equalsIgnoreCase("Male") ? 1.0 : 0.0,
-            runner.getTotalTimeInSeconds()
         };  
     }
 }
