@@ -49,6 +49,11 @@ public class RunnerProfile {
         return weeklyMileage;
     }
 
+    public String getRaceTime(String race) {
+        return raceTimes.getOrDefault(race, null);
+    }
+
+
     public Map<String, String> getRaceTimes() {
         return raceTimes;
     }
@@ -61,6 +66,13 @@ public class RunnerProfile {
         return bestRaceTime;
     }
 
+    public String getGender() {
+        return gender;
+    }
+    
+    public int getAge() {
+        return age;
+    }
 
     public static double convertTimeToSeconds(String time) {
         String[] parts = time.split(":");
