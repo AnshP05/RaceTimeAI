@@ -1,18 +1,25 @@
 package models;
 
-import java.util.List;
-
-import smile.regression.LinearModel;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        List<RunnerProfile> runners = CSVHandler.readProfilesFromCSV("src/data/GoogleFormData(52).csv");
-        LinearModel model  = MLTrainer.train5kModel(runners);
-        for (RunnerProfile runner : runners) {
-            if (runner.getRaceTime("5k") == null || runner.getRaceTime("5k").isEmpty()) {
-                double predicted = MLTrainer.predict5kTime(runner, model);
-                System.out.println("Predicted 5k Time for runner (age " + runner.getAge() + "): " + Formatter.formatTime(predicted));
-            }
+        String filePath = "src/data/GoogleFormData(52).csv"; // Adjust to your CSV path
+        List<RunnerProfile> runners = CSVHandler.readProfilesFromCSV(filePath);
+
+        // Train all pairwise models: input distance → target distance
+        Map<String, Map<String, smile.regression.LinearModel>> modelMap = MLTrainer.trainModelsByInputDistance(runners);
+
+        // Example input
+        String inputDistance = "mile";
+        String inputTime = "4:16";
+
+        // Predict all other distances from this one input
+        Map<String, String> predicted = MLTrainer.predictAllFromSingleInput(inputDistance, inputTime, modelMap);
+
+        System.out.println("\nPredicted race times based on " + inputTime + " " + inputDistance + ":");
+        for (Map.Entry<String, String> entry : predicted.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
         }
     }
 }
