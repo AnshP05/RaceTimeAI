@@ -227,7 +227,7 @@ public class MLTrainer {
                     String inputTimeStr = runner.getRaceTime(inputDist);
                     String targetTimeStr = runner.getRaceTime(targetDist);
 
-                    if(inputDist == null || targetDist == null || inputDist.isEmpty() || targetDist.isEmpty() || inputDist.equals("0") || targetDist.equals("0")) {
+                    if(inputTimeStr == null || targetTimeStr == null || inputTimeStr.isEmpty() || targetTimeStr.isEmpty() || inputTimeStr.equals("0") || targetTimeStr.equals("0")) {
                         continue;
                     }
 
