@@ -21,7 +21,7 @@ public class TimePredictor {
     );
 
 
-    private double manipulateFatigueExponent(RunnerProfile runner) {
+    public double manipulateFatigueExponent(RunnerProfile runner) {
         double r = 1.06;
         double yearsRunning = runner.getYearsRunning();
         double weeklyMileage = runner.getWeeklyMileage();

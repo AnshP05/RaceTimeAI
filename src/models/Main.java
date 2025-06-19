@@ -11,8 +11,8 @@ public class Main {
         Map<String, Map<String, smile.regression.LinearModel>> modelMap = MLTrainer.trainModelsByInputDistance(runners);
 
         // Example input
-        String inputDistance = "mile";
-        String inputTime = "4:16";
+        String inputDistance = "5k";
+        String inputTime = "16:36";
 
         // Predict all other distances from this one input
         Map<String, String> predicted = MLTrainer.predictAllFromSingleInput(inputDistance, inputTime, modelMap);

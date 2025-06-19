@@ -13,6 +13,40 @@ import scala.Array;
 
 public class MLTrainer {
 
+    public static void fillMissingTimesWithRiegel(List<RunnerProfile> runners) {
+        String[] distances = {"800m", "1500m", "mile", "3000m", "2 mile", "5k", "8k", "10k", "half marathon", "marathon"};
+
+        for(RunnerProfile runner : runners) {
+            String baseEvent = runner.getRaceDistance();
+            String baseTimeStr = runner.getRaceTime(baseEvent);
+
+            if (baseEvent == null || baseTimeStr == null || baseTimeStr.isEmpty() || baseTimeStr.equals("0")) continue;
+
+            double t1 = RunnerProfile.convertTimeToSeconds(baseTimeStr);
+            double d1 = TimePredictor.distanceMap.getOrDefault(baseEvent, -1.0);
+
+            if(d1 <= 0) continue;
+
+            double r = new TimePredictor().manipulateFatigueExponent(runner);
+
+            for(String targetEvent : distances) {
+                if(targetEvent.equals(baseEvent)) continue;
+
+                String existingTime = runner.getRaceTime(targetEvent);
+                if (existingTime != null && !existingTime.isEmpty() && !existingTime.equals("0")) continue;
+
+
+                double d2 = TimePredictor.distanceMap.getOrDefault(targetEvent, -1.0);
+                if(d2 <= 0) continue;
+
+                double t2 = t1 * Math.pow((d2/d1), r);
+                String formatted = Formatter.formatTime(t2);
+
+                runner.addRaceTime(targetEvent, formatted);
+            }
+        }
+    }
+
     public static smile.regression.LinearModel train5kModel(List<RunnerProfile> runners) {
         List<double[]> X = new ArrayList<>();
         List<Double> Y = new ArrayList<>();
@@ -176,5 +210,45 @@ public class MLTrainer {
         }
 
         return predictions;
+    }
+
+    public static Map<String, Map<String, LinearModel>> trainMidDistanceModels(List<RunnerProfile> runners) {
+        String[] midDistanceEvents = {"800m", "1500m", "mile", "3000m", "2 mile", "5k", "8k"};
+        Map<String, Map<String, LinearModel>> midModels = new HashMap<>();
+
+        for(String inputDist : midDistanceEvents) {
+            for(String targetDist : midDistanceEvents) {
+                if(inputDist.equals(targetDist)) continue;
+
+                List<Double> xList = new ArrayList<>();
+                List<Double> yList = new ArrayList<>();
+
+                for(RunnerProfile runner: runners) {
+                    String inputTimeStr = runner.getRaceTime(inputDist);
+                    String targetTimeStr = runner.getRaceTime(targetDist);
+
+                    if(inputDist == null || targetDist == null || inputDist.isEmpty() || targetDist.isEmpty() || inputDist.equals("0") || targetDist.equals("0")) {
+                        continue;
+                    }
+
+                    double inputTime = RunnerProfile.convertTimeToSeconds(inputTimeStr);
+                    double targetTime = RunnerProfile.convertTimeToSeconds(targetTimeStr);
+
+                    xList.add(inputTime);
+                    yList.add(targetTime);
+                }
+
+                if(xList.size() < 10) continue;
+
+                double[] xArr = xList.stream().mapToDouble(Double :: doubleValue).toArray();
+                double[] yArr = yList.stream().mapToDouble(Double :: doubleValue).toArray();
+
+                DataFrame df = DataFrame.of(DoubleVector.of(inputDist, xArr)).merge(DoubleVector.of(targetDist, yArr));
+                LinearModel model = RidgeRegression.fit(Formula.lhs(targetDist), df, 0.1);
+                midModels.computeIfAbsent(inputDist, k -> new HashMap<>()).put(targetDist, model);
+
+            }
+        }
+        return midModels;
     }
 }
