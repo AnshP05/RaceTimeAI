@@ -31,5 +31,8 @@ public class Main {
         for (Map.Entry<String, String> entry : predicted1.entrySet()) {
             System.out.println(entry.getKey() + ": " + entry.getValue());
         }
+
+        ModelEvaluator.evaluateMidDistanceModels(runners2, midDistanceMap1);
+        ModelEvaluator.evaluateMidDistanceModels(runners1, midDistanceMap);
     }
 }
